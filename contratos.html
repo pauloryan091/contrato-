@@ -1,0 +1,2554 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="claro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONTRATO+ | Gerenciamento de Contratos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ========== VARIÁVEIS DE DESIGN PADRÃO ========== */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --gray-light: #e5e7eb;
+            --border: #d1d5db;
+            --sidebar-bg: #1e293b;
+            --card-bg: white;
+            --text: var(--dark);
+            --text-light: var(--gray);
+            --radius: 12px;
+            --shadow: 0 10px 25px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="escuro"] {
+            --dark: #f9fafb;
+            --light: #111827;
+            --gray-light: #374151;
+            --border: #4b5563;
+            --card-bg: #1f2937;
+            --sidebar-bg: #111827;
+            --text: #f3f4f6;
+            --text-light: #d1d5db;
+            --shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        /* ========== RESET PADRÃO ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light);
+            color: var(--text);
+            transition: var(--transition);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        /* ========== LAYOUT PADRÃO ========== */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ========== SIDEBAR RESPONSIVA ========== */
+        .sidebar {
+            width: 250px;
+            background: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            position: fixed;
+            height: 100vh;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+        }
+
+        .logo-sidebar {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .logo-sidebar:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .logo-sidebar span:first-child {
+            letter-spacing: -1px;
+        }
+
+        .logo-sidebar span:last-child {
+            color: var(--secondary);
+            font-size: 2rem;
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.05);
+            color: white;
+            padding-left: 25px;
+        }
+
+        .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--secondary);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .user-info {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+        }
+
+        .user-info:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        /* ========== TOP BAR RESPONSIVA ========== */
+        .top-bar {
+            height: 70px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: var(--gray-light);
+            transform: rotate(15deg);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #dc2626, var(--danger));
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .menu-toggle:hover {
+            background: var(--gray-light);
+        }
+
+        /* ========== CONTENT AREA ========== */
+        .content-area {
+            padding: 30px;
+            flex: 1;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== ALERTAS ========== */
+        .alert {
+            padding: 15px 20px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideDown 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+
+        .alert-error {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            border: 1px solid #f59e0b;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #dbeafe, #93c5fd);
+            color: #1e40af;
+            border: 1px solid #2563eb;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .alert-close:hover {
+            background: rgba(0,0,0,0.1);
+        }
+
+        /* ========== FORMULÁRIOS ========== */
+        .form-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-header {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .form-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-subtitle {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: var(--card-bg);
+            color: var(--text);
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-light);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .required::after {
+            content: ' *';
+            color: var(--danger);
+        }
+
+        /* ========== BOTÕES ========== */
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--secondary), #0da271);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #0da271, var(--secondary));
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #dc2626, var(--danger));
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--gray-light), var(--border));
+            color: var(--text);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, var(--border), var(--gray-light));
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.9rem;
+            min-width: auto;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            filter: grayscale(0.5);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        /* ========== PREVIEW DO CONTRATO ========== */
+        .contract-preview {
+            background: var(--gray-light);
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-top: 20px;
+            border-left: 4px solid var(--secondary);
+            box-shadow: var(--shadow-sm);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .preview-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-content {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .preview-item {
+            margin-bottom: 8px;
+            display: flex;
+            padding: 4px 0;
+            border-bottom: 1px dashed var(--border);
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .preview-label {
+            color: var(--text-light);
+            font-weight: 500;
+            min-width: 100px;
+        }
+
+        .preview-value {
+            color: var(--text);
+            text-align: right;
+            flex: 1;
+        }
+
+        /* ========== TABELA RESPONSIVA ========== */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            min-height: 200px;
+        }
+
+        #contratosTable {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        #contratosTable th,
+        #contratosTable td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        #contratosTable th {
+            background: var(--gray-light);
+            font-weight: 600;
+            color: var(--text);
+            position: sticky;
+            top: 0;
+        }
+
+        #contratosTable tr:hover {
+            background: var(--gray-light);
+        }
+
+        #contratosTable tr.alerta-expirado {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--danger);
+        }
+
+        #contratosTable tr.alerta-vermelho {
+            background: rgba(239, 68, 68, 0.05);
+            border-left: 4px solid #ef4444;
+        }
+
+        #contratosTable tr.alerta-amarelo {
+            background: rgba(245, 158, 11, 0.05);
+            border-left: 4px solid #f59e0b;
+        }
+
+        /* ========== ESTADO VAZIO ========== */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--gray);
+        }
+
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .empty-state p {
+            margin-bottom: 20px;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ========== MODAIS ========== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            animation: modalSlideUp 0.3s ease;
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--gray-light);
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* ========== LOADING ========== */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(37, 99, 235, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========== UTILITY CLASSES ========== */
+        .text-muted { color: var(--text-light); }
+        .text-danger { color: var(--danger); }
+        .text-warning { color: var(--warning); }
+        .text-success { color: var(--secondary); }
+        .d-flex { display: flex; }
+        .mobile-hidden { display: table-cell; }
+        .mobile-only { display: none; }
+        .desktop-only { display: inline; }
+
+        .badge { 
+            padding: 4px 10px; 
+            border-radius: 20px; 
+            font-size: 0.85rem; 
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .badge-success { background: rgba(16, 185, 129, 0.2); color: #065f46; }
+        .badge-danger { background: rgba(239, 68, 68, 0.2); color: #991b1b; }
+        .badge-warning { background: rgba(245, 158, 11, 0.2); color: #92400e; }
+        .badge-info { background: rgba(37, 99, 235, 0.2); color: #1e40af; }
+        .badge-secondary { background: var(--gray-light); color: var(--text); }
+
+        .dias-restantes {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* ========== RESPONSIVIDADE ========== */
+        @media (max-width: 768px) {
+            .sidebar {
+                left: -100%;
+                transition: left 0.3s ease;
+            }
+            
+            .sidebar.active {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .top-bar {
+                padding: 0 15px;
+                height: 60px;
+            }
+            
+            .content-area {
+                padding: 15px;
+            }
+            
+            .form-card {
+                padding: 20px;
+            }
+            
+            .form-title {
+                font-size: 1.5rem;
+            }
+            
+            .logout-btn span {
+                display: none;
+            }
+            
+            .logout-btn {
+                padding: 10px;
+                min-width: 40px;
+            }
+            
+            .btn-group .btn-sm span {
+                display: none;
+            }
+            
+            .mobile-hidden { display: none; }
+            .mobile-only { display: block; }
+            .desktop-only { display: none; }
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-card {
+                padding: 15px;
+            }
+            
+            .btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .table-wrapper {
+                margin-left: -15px;
+                margin-right: -15px;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+            }
+        }
+    </style>
+</head>
+<body data-theme="claro">
+    <div class="app-container">
+        <!-- Sidebar Responsiva -->
+        <div class="sidebar" id="sidebar">
+            <div class="logo-sidebar" onclick="window.location.href='dashboard.html'">
+                <span>CONTRATO</span>
+                <span>+</span>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="contratos.html" class="nav-item active">
+                    <i class="fas fa-file-contract"></i>
+                    <span>Contratos</span>
+                </a>
+                <a href="notificacoes.html" class="nav-item">
+                    <i class="fas fa-bell"></i>
+                    <span>Notificações</span>
+                </a>
+                <a href="configuracoes.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Configurações</span>
+                </a>
+            </div>
+            
+            <div class="user-info" id="userInfo">
+                <div class="user-avatar" id="userAvatar">A</div>
+                <span id="userName">Carregando...</span>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Bar Responsiva -->
+            <div class="top-bar">
+                <div class="page-title">
+                    <button class="menu-toggle" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <i class="fas fa-file-contract"></i>
+                    <span>Gerenciamento de Contratos</span>
+                </div>
+                
+                <div class="top-bar-actions">
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Alternar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Sair</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Alertas -->
+                <div id="alertContainer"></div>
+                
+                <!-- Formulário de Contrato -->
+                <div class="form-card">
+                    <div class="form-header">
+                        <div class="form-title" id="formTitle">Adicionar Novo Contrato</div>
+                        <div class="form-subtitle" id="formSubtitle">Preencha os dados do contrato abaixo</div>
+                    </div>
+                    
+                    <form id="contratoForm">
+                        <input type="hidden" id="contratoId">
+                        
+                        <div class="form-group">
+                            <label class="form-label required" for="nome">
+                                <i class="fas fa-signature"></i>
+                                Nome do Contrato
+                            </label>
+                            <input type="text" 
+                                   id="nome" 
+                                   name="nome" 
+                                   class="form-control" 
+                                   placeholder="Ex: Contrato de Prestação de Serviços"
+                                   required
+                                   maxlength="200">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="descricao">
+                                <i class="fas fa-align-left"></i>
+                                Descrição
+                            </label>
+                            <textarea id="descricao" 
+                                      name="descricao" 
+                                      class="form-control" 
+                                      placeholder="Descreva os detalhes do contrato..."
+                                      rows="4"
+                                      maxlength="1000"></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label required" for="data_inicio">
+                                    <i class="fas fa-calendar-plus"></i>
+                                    Data e Hora de Início
+                                </label>
+                                <input type="datetime-local" 
+                                       id="data_inicio" 
+                                       name="data_inicio" 
+                                       class="form-control" 
+                                       required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label required" for="data_fim">
+                                    <i class="fas fa-calendar-minus"></i>
+                                    Data e Hora de Término
+                                </label>
+                                <input type="datetime-local" 
+                                       id="data_fim" 
+                                       name="data_fim" 
+                                       class="form-control" 
+                                       required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required" for="status">
+                                <i class="fas fa-toggle-on"></i>
+                                Status
+                            </label>
+                            <select id="status" name="status" class="form-control" required>
+                                <option value="ativo">Ativo</option>
+                                <option value="inativo">Inativo</option>
+                                <option value="concluido">Concluído</option>
+                                <option value="pendente">Pendente</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Pré-visualização -->
+                        <div class="contract-preview" id="contractPreview" style="display: none;">
+                            <div class="preview-title">
+                                <i class="fas fa-eye"></i>
+                                Pré-visualização do Contrato
+                            </div>
+                            <div class="preview-content">
+                                <div class="preview-item">
+                                    <span class="preview-label">Nome:</span>
+                                    <span class="preview-value" id="previewNome">-</span>
+                                </div>
+                                <div class="preview-item">
+                                    <span class="preview-label">Descrição:</span>
+                                    <span class="preview-value" id="previewDescricao">-</span>
+                                </div>
+                                <div class="preview-item">
+                                    <span class="preview-label">Data Início:</span>
+                                    <span class="preview-value" id="previewInicio">-</span>
+                                </div>
+                                <div class="preview-item">
+                                    <span class="preview-label">Data Término:</span>
+                                    <span class="preview-value" id="previewFim">-</span>
+                                </div>
+                                <div class="preview-item">
+                                    <span class="preview-label">Status:</span>
+                                    <span class="preview-value" id="previewStatus">-</span>
+                                </div>
+                                <div class="preview-item">
+                                    <span class="preview-label">Duração:</span>
+                                    <span class="preview-value" id="previewDuracao">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
+                            <button type="submit" class="btn btn-primary" style="flex: 1;" id="submitButton">
+                                <i class="fas fa-save"></i>
+                                <span id="submitButtonText">Salvar Contrato</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="limparFormulario()" style="flex: 1;">
+                                <i class="fas fa-times"></i>
+                                Limpar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Lista de Contratos -->
+                <div class="form-card">
+                    <div class="form-header">
+                        <div class="form-title">Contratos Cadastrados</div>
+                        <div class="form-subtitle" id="contadorContratos">
+                            <span id="contadorTotal">0</span> contratos no total
+                            (<span id="contadorAtivos">0</span> ativos, 
+                            <span id="contadorPendentes">0</span> pendentes)
+                        </div>
+                    </div>
+                    
+                    <!-- Controles -->
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <input type="text" 
+                                   id="inputBusca" 
+                                   class="form-control" 
+                                   placeholder="Buscar por nome ou descrição..."
+                                   oninput="filtrarContratos()">
+                        </div>
+                        <div style="min-width: 150px;">
+                            <select id="filtroStatus" class="form-control" onchange="filtrarContratos()">
+                                <option value="todos">Todos os Status</option>
+                                <option value="ativo">Ativo</option>
+                                <option value="inativo">Inativo</option>
+                                <option value="concluido">Concluído</option>
+                                <option value="pendente">Pendente</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-success" onclick="exportarContratos()">
+                            <i class="fas fa-file-export"></i>
+                            <span class="desktop-only">Exportar</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="carregarContratos()">
+                            <i class="fas fa-sync-alt"></i>
+                            <span class="desktop-only">Atualizar</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Tabela -->
+                    <div class="table-wrapper">
+                        <table id="contratosTable">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th class="mobile-hidden">Início</th>
+                                    <th class="mobile-hidden">Término</th>
+                                    <th>Dias Restantes</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="contratosTableBody">
+                                <!-- Dados serão carregados aqui -->
+                            </tbody>
+                        </table>
+                        
+                        <!-- Estado vazio -->
+                        <div id="emptyState" class="empty-state" style="display: none;">
+                            <i class="fas fa-file-contract"></i>
+                            <h3>Nenhum contrato encontrado</h3>
+                            <p>Adicione seu primeiro contrato usando o formulário acima.</p>
+                            <button class="btn btn-primary" onclick="limparFormulario(); window.scrollTo({top: 0, behavior: 'smooth'})">
+                                <i class="fas fa-plus"></i>
+                                Criar Contrato
+                            </button>
+                        </div>
+                        
+                        <!-- Loading -->
+                        <div id="loadingState" class="empty-state" style="display: none;">
+                            <div class="loading"></div>
+                            <p>Carregando contratos...</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Paginação -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; flex-wrap: wrap; gap: 10px;">
+                        <div class="text-muted" id="paginationInfo">
+                            Mostrando <span id="currentPage">0</span> de <span id="totalPages">0</span> páginas
+                        </div>
+                        <div style="display: flex; gap: 5px;">
+                            <button class="btn btn-sm btn-secondary" onclick="mudarPagina(-1)" id="prevPage" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="btn btn-sm btn-secondary" onclick="mudarPagina(1)" id="nextPage" disabled>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal-overlay" id="confirmModal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" id="confirmTitle">Confirmação</div>
+                <button class="modal-close" onclick="fecharModal()">×</button>
+            </div>
+            <div class="modal-body" id="confirmMessage">
+                Tem certeza que deseja realizar esta ação?
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+                <button class="btn btn-danger" onclick="confirmarAcao()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Notificação -->
+    <div class="modal-overlay" id="notifyModal" style="display: none;">
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <div class="modal-title" id="notifyTitle">Enviar Notificação</div>
+                <button class="modal-close" onclick="fecharNotifyModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label required" for="emailsDestino">
+                        <i class="fas fa-envelope"></i>
+                        Emails Destino
+                    </label>
+                    <textarea id="emailsDestino" 
+                              class="form-control" 
+                              placeholder="Digite os emails separados por vírgula"
+                              rows="3"
+                              required></textarea>
+                    <small class="text-muted">Exemplo: email1@exemplo.com, email2@exemplo.com</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label required" for="tipoNotificacao">
+                        <i class="fas fa-bell"></i>
+                        Tipo de Notificação
+                    </label>
+                    <select id="tipoNotificacao" class="form-control" required>
+                        <option value="lembrete_mensal">Lembrete Mensal (30 dias)</option>
+                        <option value="lembrete_semanal">Lembrete Semanal (7 dias)</option>
+                        <option value="lembrete_diario">Lembrete Diário (1 dia)</option>
+                        <option value="confirmacao_ativação">Confirmação de Ativação</option>
+                        <option value="customizado">Personalizado</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="assuntoNotificacao">
+                        <i class="fas fa-heading"></i>
+                        Assunto
+                    </label>
+                    <input type="text" 
+                           id="assuntoNotificacao" 
+                           class="form-control" 
+                           placeholder="Assunto do email">
+                </div>
+                
+                <div class="form-group" id="mensagemCustomizadaGroup" style="display: none;">
+                    <label class="form-label" for="mensagemCustomizada">
+                        <i class="fas fa-comment"></i>
+                        Mensagem Personalizada
+                    </label>
+                    <textarea id="mensagemCustomizada" 
+                              class="form-control" 
+                              placeholder="Digite sua mensagem personalizada..."
+                              rows="4"></textarea>
+                </div>
+                
+                <div id="notifyPreview" class="contract-preview">
+                    <div class="preview-title">
+                        <i class="fas fa-eye"></i>
+                        Pré-visualização da Notificação
+                    </div>
+                    <div class="preview-content" id="notifyPreviewContent">
+                        <!-- Conteúdo da pré-visualização será inserido aqui -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="fecharNotifyModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="enviarNotificacaoConfirmado()" id="enviarNotifyBtn">
+                    <i class="fas fa-paper-plane"></i>
+                    Enviar Notificação
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="globalLoading" style="display: none;">
+        <div class="loading" style="width: 50px; height: 50px; border-width: 4px;"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        // ========== CONFIGURAÇÕES GERAIS ==========
+        const API_BASE_URL = `${window.location.origin}/api`;
+        
+        let contratoEditandoId = null;
+        let contratosFiltrados = [];
+        let paginaAtual = 1;
+        const contratosPorPagina = 10;
+        let acaoConfirmar = null;
+        let dadosConfirmar = null;
+        let contratoParaNotificar = null;
+        let autoRefreshInterval = null;
+
+        // ========== FUNÇÕES DE AUTENTICAÇÃO ==========
+        async function verificarAutenticacao() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/check`, {
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (!data.authenticated) {
+                    window.location.href = '/';
+                    return null;
+                }
+                
+                // Atualizar informações do usuário
+                const userNameElement = document.getElementById('userName');
+                const userAvatarElement = document.getElementById('userAvatar');
+                
+                if (userNameElement) userNameElement.textContent = data.user.nome_completo;
+                if (userAvatarElement && data.user.nome_completo) {
+                    userAvatarElement.textContent = data.user.nome_completo.charAt(0).toUpperCase();
+                }
+                
+                return data.user;
+            } catch (error) {
+                console.error('Erro na autenticação:', error);
+                window.location.href = '/';
+                return null;
+            }
+        }
+
+        async function logout() {
+            if (confirm('Deseja realmente sair do sistema?')) {
+                try {
+                    await fetch(`${API_BASE_URL}/logout`, {
+                        method: 'POST',
+                        credentials: 'include'
+                    });
+                } catch (error) {
+                    console.error('Erro no logout:', error);
+                }
+                window.location.href = '/';
+            }
+        }
+
+        // ========== FUNÇÕES DA INTERFACE ==========
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.body.setAttribute('data-theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.body.dataset.theme;
+            const newTheme = currentTheme === 'claro' ? 'escuro' : 'claro';
+            applyTheme(newTheme);
+            localStorage.setItem('contrato-mais-theme', newTheme);
+            
+            const themeIcon = document.querySelector('.theme-toggle i');
+            if (themeIcon) {
+                themeIcon.className = newTheme === 'claro' ? 'fas fa-moon' : 'fas fa-sun';
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('active');
+            }
+        }
+
+        function updatePreview() {
+            const nomeElement = document.getElementById('nome');
+            const descricaoElement = document.getElementById('descricao');
+            const inicioElement = document.getElementById('data_inicio');
+            const fimElement = document.getElementById('data_fim');
+            const statusElement = document.getElementById('status');
+            const previewElement = document.getElementById('contractPreview');
+            
+            if (!nomeElement || !previewElement) return;
+            
+            const nome = nomeElement.value.trim();
+            const descricao = descricaoElement ? descricaoElement.value.trim() : '';
+            const inicio = inicioElement ? inicioElement.value : '';
+            const fim = fimElement ? fimElement.value : '';
+            const status = statusElement ? statusElement.value : 'ativo';
+            
+            if (nome || descricao || inicio || fim) {
+                previewElement.style.display = 'block';
+                
+                const previewNome = document.getElementById('previewNome');
+                const previewDescricao = document.getElementById('previewDescricao');
+                const previewInicio = document.getElementById('previewInicio');
+                const previewFim = document.getElementById('previewFim');
+                const previewStatus = document.getElementById('previewStatus');
+                const previewDuracao = document.getElementById('previewDuracao');
+                
+                if (previewNome) previewNome.textContent = nome || 'Não informado';
+                if (previewDescricao) previewDescricao.textContent = descricao || 'Não informado';
+                
+                if (inicio && previewInicio) {
+                    const dataInicio = new Date(inicio);
+                    previewInicio.textContent = 
+                        dataInicio.toLocaleDateString('pt-BR') + ' ' + 
+                        dataInicio.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                } else if (previewInicio) {
+                    previewInicio.textContent = 'Não informado';
+                }
+                
+                if (fim && previewFim) {
+                    const dataFim = new Date(fim);
+                    previewFim.textContent = 
+                        dataFim.toLocaleDateString('pt-BR') + ' ' + 
+                        dataFim.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                } else if (previewFim) {
+                    previewFim.textContent = 'Não informado';
+                }
+                
+                if (previewStatus) {
+                    previewStatus.textContent = 
+                        status === 'ativo' ? 'Ativo' :
+                        status === 'inativo' ? 'Inativo' :
+                        status === 'concluido' ? 'Concluído' : 'Pendente';
+                }
+                
+                if (inicio && fim && previewDuracao) {
+                    const inicioDate = new Date(inicio);
+                    const fimDate = new Date(fim);
+                    const diffTime = Math.abs(fimDate - inicioDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    previewDuracao.textContent = `${diffDays} dias`;
+                } else if (previewDuracao) {
+                    previewDuracao.textContent = '-';
+                }
+            } else {
+                previewElement.style.display = 'none';
+            }
+        }
+
+        function limparFormulario() {
+            const contratoForm = document.getElementById('contratoForm');
+            const contratoId = document.getElementById('contratoId');
+            const contractPreview = document.getElementById('contractPreview');
+            const formTitle = document.getElementById('formTitle');
+            const formSubtitle = document.getElementById('formSubtitle');
+            const submitButtonText = document.getElementById('submitButtonText');
+            const dataInicio = document.getElementById('data_inicio');
+            const dataFim = document.getElementById('data_fim');
+            
+            if (contratoForm) contratoForm.reset();
+            if (contratoId) contratoId.value = '';
+            if (contractPreview) contractPreview.style.display = 'none';
+            
+            if (formTitle) formTitle.textContent = 'Adicionar Novo Contrato';
+            if (formSubtitle) formSubtitle.textContent = 'Preencha os dados do contrato abaixo';
+            if (submitButtonText) submitButtonText.textContent = 'Salvar Contrato';
+            
+            contratoEditandoId = null;
+            
+            // Resetar datas para padrão
+            if (dataInicio && dataFim) {
+                const hoje = new Date();
+                const mesQueVem = new Date(hoje);
+                mesQueVem.setMonth(hoje.getMonth() + 1);
+                
+                dataInicio.value = hoje.toISOString().slice(0, 16);
+                dataFim.value = mesQueVem.toISOString().slice(0, 16);
+            }
+            
+            updatePreview();
+        }
+
+        // ========== FUNÇÕES CRUD PARA CONTRATOS ==========
+        async function salvarContrato(event) {
+            event.preventDefault();
+            
+            const nomeElement = document.getElementById('nome');
+            const descricaoElement = document.getElementById('descricao');
+            const dataInicioElement = document.getElementById('data_inicio');
+            const dataFimElement = document.getElementById('data_fim');
+            const statusElement = document.getElementById('status');
+            const submitBtn = document.getElementById('submitButton');
+            
+            if (!nomeElement || !dataInicioElement || !dataFimElement || !statusElement || !submitBtn) {
+                showAlert('Erro: Elementos do formulário não encontrados', 'error');
+                return;
+            }
+            
+            const nome = nomeElement.value.trim();
+            const descricao = descricaoElement ? descricaoElement.value.trim() : '';
+            const data_inicio = dataInicioElement.value;
+            const data_fim = dataFimElement.value;
+            const status = statusElement.value;
+            const id = contratoEditandoId;
+            
+            // Validações
+            if (!nome) {
+                showAlert('O nome do contrato é obrigatório!', 'error');
+                nomeElement.focus();
+                return;
+            }
+            
+            if (!data_inicio || !data_fim) {
+                showAlert('As datas de início e término são obrigatórias!', 'error');
+                return;
+            }
+            
+            const inicioDate = new Date(data_inicio);
+            const fimDate = new Date(data_fim);
+            
+            if (fimDate <= inicioDate) {
+                showAlert('A data de término deve ser posterior à data de início!', 'error');
+                dataFimElement.focus();
+                return;
+            }
+            
+            // Verificar autenticação
+            const user = await verificarAutenticacao();
+            if (!user) return;
+            
+            // Desabilitar botão
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+            
+            try {
+                const contratoData = {
+                    nome,
+                    descricao,
+                    data_inicio,
+                    data_fim,
+                    status
+                };
+                
+                let url = `${API_BASE_URL}/contratos`;
+                let method = 'POST';
+                
+                if (id) {
+                    url = `${API_BASE_URL}/contratos/${id}`;
+                    method = 'PUT';
+                }
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(contratoData),
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    limparFormulario();
+                    await carregarContratos();
+                    
+                    // Rolar para a lista
+                    const formCards = document.querySelectorAll('.form-card');
+                    if (formCards.length >= 2) {
+                        formCards[1].scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                } else {
+                    showAlert(data.message || 'Erro ao salvar contrato', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Erro ao salvar contrato:', error);
+                showAlert('Erro ao salvar contrato. Verifique sua conexão.', 'error');
+            } finally {
+                // Reabilitar botão
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        }
+
+        async function carregarContratos() {
+            const user = await verificarAutenticacao();
+            if (!user) return;
+            
+            const tbody = document.getElementById('contratosTableBody');
+            const loadingState = document.getElementById('loadingState');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (!tbody || !loadingState || !emptyState) return;
+            
+            // Mostrar loading
+            tbody.innerHTML = '';
+            loadingState.style.display = 'block';
+            emptyState.style.display = 'none';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/contratos`, {
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    contratosFiltrados = data.contratos || [];
+                    atualizarListaContratos();
+                } else {
+                    showAlert('Erro ao carregar contratos', 'error');
+                    emptyState.style.display = 'block';
+                }
+                
+            } catch (error) {
+                console.error('Erro ao carregar contratos:', error);
+                showAlert('Erro ao carregar contratos. Verifique sua conexão.', 'error');
+                emptyState.style.display = 'block';
+            } finally {
+                loadingState.style.display = 'none';
+            }
+        }
+
+        function atualizarListaContratos() {
+            const tbody = document.getElementById('contratosTableBody');
+            const emptyState = document.getElementById('emptyState');
+            const contadorTotal = document.getElementById('contadorTotal');
+            const contadorAtivos = document.getElementById('contadorAtivos');
+            const contadorPendentes = document.getElementById('contadorPendentes');
+            
+            if (!tbody || !emptyState || !contadorTotal || !contadorAtivos || !contadorPendentes) {
+                return;
+            }
+            
+            if (!contratosFiltrados || contratosFiltrados.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                contadorTotal.textContent = '0';
+                contadorAtivos.textContent = '0';
+                contadorPendentes.textContent = '0';
+                atualizarPaginacao();
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            
+            // Aplicar filtros
+            const filtroStatusElement = document.getElementById('filtroStatus');
+            const buscaElement = document.getElementById('inputBusca');
+            
+            const filtroStatus = filtroStatusElement ? filtroStatusElement.value : 'todos';
+            const busca = buscaElement ? buscaElement.value.toLowerCase().trim() : '';
+            
+            let contratosFiltradosLocal = contratosFiltrados;
+            
+            // Filtrar por status
+            if (filtroStatus !== 'todos') {
+                contratosFiltradosLocal = contratosFiltradosLocal.filter(c => c.status === filtroStatus);
+            }
+            
+            // Filtrar por busca
+            if (busca) {
+                contratosFiltradosLocal = contratosFiltradosLocal.filter(c => 
+                    c.nome.toLowerCase().includes(busca) || 
+                    (c.descricao && c.descricao.toLowerCase().includes(busca))
+                );
+            }
+            
+            // Calcular estatísticas
+            const total = contratosFiltradosLocal.length;
+            const ativos = contratosFiltradosLocal.filter(c => c.status === 'ativo').length;
+            const pendentes = contratosFiltradosLocal.filter(c => c.status === 'pendente').length;
+            
+            contadorTotal.textContent = total;
+            contadorAtivos.textContent = ativos;
+            contadorPendentes.textContent = pendentes;
+            
+            // Calcular paginação
+            const totalPaginas = Math.ceil(total / contratosPorPagina);
+            const inicio = (paginaAtual - 1) * contratosPorPagina;
+            const fim = Math.min(inicio + contratosPorPagina, total);
+            const contratosPagina = contratosFiltradosLocal.slice(inicio, fim);
+            
+            let html = '';
+            
+            contratosPagina.forEach(contrato => {
+                const diasRestantes = calcularDiasRestantes(contrato.data_fim);
+                const statusInfo = formatarStatus(contrato.status);
+                const dataInicio = formatarData(contrato.data_inicio);
+                const dataFim = formatarData(contrato.data_fim);
+                
+                let linhaClasse = '';
+                let textoDias = '';
+                let classeDias = '';
+                
+                if (diasRestantes <= 0) {
+                    linhaClasse = 'alerta-expirado';
+                    textoDias = 'Expirado';
+                    classeDias = 'text-danger';
+                } else if (diasRestantes <= 7) {
+                    linhaClasse = 'alerta-vermelho';
+                    textoDias = `${diasRestantes} dias`;
+                    classeDias = 'text-danger';
+                } else if (diasRestantes <= 30) {
+                    linhaClasse = 'alerta-amarelo';
+                    textoDias = `${diasRestantes} dias`;
+                    classeDias = 'text-warning';
+                } else {
+                    textoDias = `${diasRestantes} dias`;
+                    classeDias = 'text-success';
+                }
+                
+                html += `
+                    <tr class="${linhaClasse}" data-id="${contrato.id}">
+                        <td>
+                            <div style="font-weight: 600; color: var(--text); margin-bottom: 4px;">
+                                ${contrato.nome}
+                            </div>
+                            <div class="text-muted mobile-hidden" style="font-size: 0.9em; line-height: 1.4;">
+                                ${contrato.descricao ? contrato.descricao.substring(0, 100) + (contrato.descricao.length > 100 ? '...' : '') : 'Sem descrição'}
+                            </div>
+                            <div class="mobile-only" style="font-size: 0.85em; color: var(--text-light); margin-top: 4px;">
+                                Início: ${formatarDataCurta(contrato.data_inicio)}<br>
+                                Término: ${formatarDataCurta(contrato.data_fim)}
+                            </div>
+                        </td>
+                        <td class="mobile-hidden">${dataInicio}</td>
+                        <td class="mobile-hidden">${dataFim}</td>
+                        <td>
+                            <div class="dias-restantes ${classeDias}">
+                                <i class="fas fa-calendar-day"></i>
+                                ${textoDias}
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge ${statusInfo.classe}">
+                                <i class="fas fa-${statusInfo.icone}"></i>
+                                ${statusInfo.texto}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-secondary" onclick="editarContrato(${contrato.id})" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                    <span class="desktop-only">Editar</span>
+                                </button>
+                                <button class="btn btn-sm ${contrato.status === 'ativo' ? 'btn-danger' : 'btn-success'}" 
+                                        onclick="${contrato.status === 'ativo' ? `alterarStatusContrato(${contrato.id}, 'inativo')` : `alterarStatusContrato(${contrato.id}, 'ativo')`}" 
+                                        title="${contrato.status === 'ativo' ? 'Inativar' : 'Ativar'}">
+                                    <i class="fas fa-${contrato.status === 'ativo' ? 'pause' : 'play'}"></i>
+                                    <span class="desktop-only">${contrato.status === 'ativo' ? 'Inativar' : 'Ativar'}</span>
+                                </button>
+                                <button class="btn btn-sm btn-primary" onclick="abrirModalNotificacao(${contrato.id}, '${contrato.nome.replace(/'/g, "\\'")}')" title="Notificar">
+                                    <i class="fas fa-bell"></i>
+                                    <span class="desktop-only">Notificar</span>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="confirmarExclusao(${contrato.id})" title="Excluir">
+                                    <i class="fas fa-trash"></i>
+                                    <span class="desktop-only">Excluir</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+            atualizarPaginacao();
+        }
+
+        function atualizarPaginacao() {
+            const filtroStatusElement = document.getElementById('filtroStatus');
+            const buscaElement = document.getElementById('inputBusca');
+            const currentPageElement = document.getElementById('currentPage');
+            const totalPagesElement = document.getElementById('totalPages');
+            const paginationInfoElement = document.getElementById('paginationInfo');
+            const prevPageElement = document.getElementById('prevPage');
+            const nextPageElement = document.getElementById('nextPage');
+            
+            if (!filtroStatusElement || !buscaElement || !currentPageElement || !totalPagesElement || 
+                !paginationInfoElement || !prevPageElement || !nextPageElement) {
+                return;
+            }
+            
+            const filtroStatus = filtroStatusElement.value;
+            const busca = buscaElement.value.toLowerCase().trim();
+            
+            let contratosFiltradosLocal = contratosFiltrados;
+            
+            if (filtroStatus !== 'todos') {
+                contratosFiltradosLocal = contratosFiltradosLocal.filter(c => c.status === filtroStatus);
+            }
+            
+            if (busca) {
+                contratosFiltradosLocal = contratosFiltradosLocal.filter(c => 
+                    c.nome.toLowerCase().includes(busca) || 
+                    (c.descricao && c.descricao.toLowerCase().includes(busca))
+                );
+            }
+            
+            const total = contratosFiltradosLocal.length;
+            const totalPaginas = Math.ceil(total / contratosPorPagina);
+            
+            currentPageElement.textContent = paginaAtual;
+            totalPagesElement.textContent = totalPaginas;
+            paginationInfoElement.innerHTML = `
+                Mostrando <strong>${paginaAtual}</strong> de <strong>${totalPaginas}</strong> páginas
+                (Total: <strong>${total}</strong> contratos)
+            `;
+            
+            prevPageElement.disabled = paginaAtual <= 1;
+            nextPageElement.disabled = paginaAtual >= totalPaginas;
+        }
+
+        function mudarPagina(direcao) {
+            const filtroStatusElement = document.getElementById('filtroStatus');
+            const buscaElement = document.getElementById('inputBusca');
+            
+            if (!filtroStatusElement || !buscaElement) return;
+            
+            const filtroStatus = filtroStatusElement.value;
+            const busca = buscaElement.value.toLowerCase().trim();
+            
+            let contratosFiltradosLocal = contratosFiltrados;
+            
+            if (filtroStatus !== 'todos') {
+                contratosFiltradosLocal = contratosFiltradosLocal.filter(c => c.status === filtroStatus);
+            }
+            
+            if (busca) {
+                contratosFiltradosLocal = contratosFiltradosLocal.filter(c => 
+                    c.nome.toLowerCase().includes(busca) || 
+                    (c.descricao && c.descricao.toLowerCase().includes(busca))
+                );
+            }
+            
+            const totalPaginas = Math.ceil(contratosFiltradosLocal.length / contratosPorPagina);
+            const novaPagina = paginaAtual + direcao;
+            
+            if (novaPagina >= 1 && novaPagina <= totalPaginas) {
+                paginaAtual = novaPagina;
+                atualizarListaContratos();
+                
+                // Rolar para o topo da tabela
+                const tableWrapper = document.querySelector('.table-wrapper');
+                if (tableWrapper) {
+                    tableWrapper.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }
+        }
+
+        function filtrarContratos() {
+            paginaAtual = 1; // Resetar para primeira página
+            atualizarListaContratos();
+        }
+
+        async function editarContrato(id) {
+            try {
+                const user = await verificarAutenticacao();
+                if (!user) return;
+                
+                const response = await fetch(`${API_BASE_URL}/contratos/${id}`, {
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const contrato = data.contrato;
+                    
+                    // Preencher formulário
+                    const contratoIdElement = document.getElementById('contratoId');
+                    const nomeElement = document.getElementById('nome');
+                    const descricaoElement = document.getElementById('descricao');
+                    const dataInicioElement = document.getElementById('data_inicio');
+                    const dataFimElement = document.getElementById('data_fim');
+                    const statusElement = document.getElementById('status');
+                    const formTitleElement = document.getElementById('formTitle');
+                    const formSubtitleElement = document.getElementById('formSubtitle');
+                    const submitButtonTextElement = document.getElementById('submitButtonText');
+                    
+                    if (contratoIdElement) contratoIdElement.value = contrato.id;
+                    if (nomeElement) nomeElement.value = contrato.nome;
+                    if (descricaoElement) descricaoElement.value = contrato.descricao || '';
+                    
+                    // Formatando datas para o input datetime-local
+                    const formatarParaInput = (dataStr) => {
+                        if (!dataStr) return '';
+                        const date = new Date(dataStr);
+                        return date.toISOString().slice(0, 16);
+                    };
+                    
+                    if (dataInicioElement) dataInicioElement.value = formatarParaInput(contrato.data_inicio);
+                    if (dataFimElement) dataFimElement.value = formatarParaInput(contrato.data_fim);
+                    if (statusElement) statusElement.value = contrato.status || 'ativo';
+                    
+                    // Atualizar título do formulário
+                    if (formTitleElement) formTitleElement.textContent = 'Editar Contrato';
+                    if (formSubtitleElement) formSubtitleElement.textContent = `Editando: ${contrato.nome}`;
+                    if (submitButtonTextElement) submitButtonTextElement.textContent = 'Atualizar Contrato';
+                    
+                    // Atualizar preview
+                    updatePreview();
+                    
+                    contratoEditandoId = id;
+                    
+                    // Rolar para o topo
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
+                    showAlert(`Editando contrato: ${contrato.nome}`, 'info');
+                    
+                } else {
+                    showAlert('Erro ao carregar contrato', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Erro ao carregar contrato para edição:', error);
+                showAlert('Erro ao carregar contrato: ' + error.message, 'error');
+            }
+        }
+
+        async function alterarStatusContrato(id, novoStatus) {
+            const user = await verificarAutenticacao();
+            if (!user) return;
+            
+            if (!confirm(`Alterar status do contrato para "${novoStatus}"?`)) return;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/contratos/${id}/status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: novoStatus }),
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    await carregarContratos();
+                } else {
+                    showAlert(data.message || 'Erro ao alterar status', 'error');
+                }
+            } catch (error) {
+                console.error('Erro ao alterar status:', error);
+                showAlert('Erro ao alterar status do contrato', 'error');
+            }
+        }
+
+        function confirmarExclusao(id) {
+            acaoConfirmar = excluirContrato;
+            dadosConfirmar = id;
+            
+            const confirmTitle = document.getElementById('confirmTitle');
+            const confirmMessage = document.getElementById('confirmMessage');
+            const confirmModal = document.getElementById('confirmModal');
+            
+            if (confirmTitle && confirmMessage && confirmModal) {
+                confirmTitle.textContent = 'Confirmar Exclusão';
+                confirmMessage.innerHTML = `
+                    <p>Tem certeza que deseja excluir este contrato?</p>
+                    <p style="color: var(--danger); font-weight: 600;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Esta ação não pode ser desfeita!
+                    </p>
+                `;
+                
+                confirmModal.style.display = 'flex';
+            }
+        }
+
+        async function excluirContrato(id) {
+            const user = await verificarAutenticacao();
+            if (!user) return;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/contratos/${id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    await carregarContratos();
+                } else {
+                    showAlert(data.message || 'Erro ao excluir contrato', 'error');
+                }
+            } catch (error) {
+                console.error('Erro ao excluir contrato:', error);
+                showAlert('Erro ao excluir contrato', 'error');
+            }
+        }
+
+        async function confirmarAcao() {
+            try {
+                await acaoConfirmar(dadosConfirmar);
+                fecharModal();
+            } catch (error) {
+                console.error('Erro ao executar ação:', error);
+                fecharModal();
+            }
+        }
+
+        function fecharModal() {
+            const confirmModal = document.getElementById('confirmModal');
+            if (confirmModal) {
+                confirmModal.style.display = 'none';
+            }
+            acaoConfirmar = null;
+            dadosConfirmar = null;
+        }
+
+        // ========== FUNÇÕES DE NOTIFICAÇÃO ==========
+        function abrirModalNotificacao(contratoId, contratoNome) {
+            contratoParaNotificar = contratoId;
+            
+            const notifyTitle = document.getElementById('notifyTitle');
+            const emailsDestino = document.getElementById('emailsDestino');
+            const tipoNotificacao = document.getElementById('tipoNotificacao');
+            const assuntoNotificacao = document.getElementById('assuntoNotificacao');
+            const mensagemCustomizada = document.getElementById('mensagemCustomizada');
+            const mensagemCustomizadaGroup = document.getElementById('mensagemCustomizadaGroup');
+            const notifyModal = document.getElementById('notifyModal');
+            
+            if (notifyTitle) notifyTitle.textContent = `Notificar: ${contratoNome}`;
+            if (emailsDestino) emailsDestino.value = '';
+            if (tipoNotificacao) tipoNotificacao.value = 'lembrete_mensal';
+            if (assuntoNotificacao) assuntoNotificacao.value = '';
+            if (mensagemCustomizada) mensagemCustomizada.value = '';
+            if (mensagemCustomizadaGroup) mensagemCustomizadaGroup.style.display = 'none';
+            
+            atualizarPreviewNotificacao();
+            if (notifyModal) notifyModal.style.display = 'flex';
+        }
+
+        function fecharNotifyModal() {
+            const notifyModal = document.getElementById('notifyModal');
+            if (notifyModal) {
+                notifyModal.style.display = 'none';
+            }
+            contratoParaNotificar = null;
+        }
+
+        function atualizarPreviewNotificacao() {
+            const tipoNotificacao = document.getElementById('tipoNotificacao');
+            const assuntoNotificacao = document.getElementById('assuntoNotificacao');
+            const mensagemCustomizada = document.getElementById('mensagemCustomizada');
+            const mensagemCustomizadaGroup = document.getElementById('mensagemCustomizadaGroup');
+            const notifyPreviewContent = document.getElementById('notifyPreviewContent');
+            
+            if (!tipoNotificacao || !notifyPreviewContent) return;
+            
+            const tipo = tipoNotificacao.value;
+            const assunto = assuntoNotificacao ? assuntoNotificacao.value.trim() : '';
+            const mensagemCustom = mensagemCustomizada ? mensagemCustomizada.value.trim() : '';
+            
+            let previewHTML = '';
+            
+            switch(tipo) {
+                case 'lembrete_mensal':
+                    previewHTML = `
+                        <div class="preview-item">
+                            <span class="preview-label">Tipo:</span>
+                            <span class="preview-value">Lembrete Mensal (30 dias)</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Assunto:</span>
+                            <span class="preview-value">${assunto || 'Lembrete: Contrato vencerá em 30 dias'}</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Mensagem:</span>
+                            <span class="preview-value">${mensagemCustom || 'Este é um lembrete automático informando que seu contrato vencerá em aproximadamente 30 dias.'}</span>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'lembrete_semanal':
+                    previewHTML = `
+                        <div class="preview-item">
+                            <span class="preview-label">Tipo:</span>
+                            <span class="preview-value">Lembrete Semanal (7 dias)</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Assunto:</span>
+                            <span class="preview-value">${assunto || 'URGENTE: Contrato vencerá em 7 dias'}</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Mensagem:</span>
+                            <span class="preview-value">${mensagemCustom || 'ATENÇÃO: Seu contrato vencerá em 7 dias. Ação imediata é necessária.'}</span>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'lembrete_diario':
+                    previewHTML = `
+                        <div class="preview-item">
+                            <span class="preview-label">Tipo:</span>
+                            <span class="preview-value">Lembrete Diário (1 dia)</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Assunto:</span>
+                            <span class="preview-value">${assunto || 'URGENTE: Contrato VENCE AMANHÃ'}</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Mensagem:</span>
+                            <span class="preview-value">${mensagemCustom || 'URGENTE: Seu contrato VENCE AMANHÃ! Tome as providências necessárias imediatamente.'}</span>
+                        </div>
+                    `;
+                    break;
+                    
+                default:
+                    previewHTML = `
+                        <div class="preview-item">
+                            <span class="preview-label">Tipo:</span>
+                            <span class="preview-value">Personalizado</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Assunto:</span>
+                            <span class="preview-value">${assunto || 'Notificação de Contrato'}</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Mensagem:</span>
+                            <span class="preview-value">${mensagemCustom || 'Notificação personalizada do sistema CONTRATO+.'}</span>
+                        </div>
+                    `;
+            }
+            
+            notifyPreviewContent.innerHTML = previewHTML;
+            
+            // Mostrar/ocultar campo de mensagem customizada
+            if (mensagemCustomizadaGroup) {
+                if (tipo === 'customizado') {
+                    mensagemCustomizadaGroup.style.display = 'block';
+                } else {
+                    mensagemCustomizadaGroup.style.display = 'none';
+                }
+            }
+        }
+
+        async function enviarNotificacaoConfirmado() {
+            const emailsDestino = document.getElementById('emailsDestino');
+            const tipoNotificacao = document.getElementById('tipoNotificacao');
+            const assuntoNotificacao = document.getElementById('assuntoNotificacao');
+            const mensagemCustomizada = document.getElementById('mensagemCustomizada');
+            const enviarNotifyBtn = document.getElementById('enviarNotifyBtn');
+            
+            if (!emailsDestino || !tipoNotificacao || !enviarNotifyBtn) {
+                showAlert('Erro: Elementos do modal não encontrados', 'error');
+                return;
+            }
+            
+            const emails = emailsDestino.value.trim();
+            const tipo = tipoNotificacao.value;
+            const assunto = assuntoNotificacao ? assuntoNotificacao.value.trim() : '';
+            const mensagemCustom = mensagemCustomizada ? mensagemCustomizada.value.trim() : '';
+            
+            // Validação
+            if (!emails) {
+                showAlert('Os emails de destino são obrigatórios!', 'error');
+                return;
+            }
+            
+            // Validar formato dos emails
+            const emailList = emails.split(',').map(email => email.trim());
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            for (const email of emailList) {
+                if (!emailRegex.test(email)) {
+                    showAlert(`Email inválido: ${email}`, 'error');
+                    return;
+                }
+            }
+            
+            const user = await verificarAutenticacao();
+            if (!user) return;
+            
+            // Desabilitar botão
+            const originalText = enviarNotifyBtn.innerHTML;
+            enviarNotifyBtn.disabled = true;
+            enviarNotifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/contratos/${contratoParaNotificar}/notificar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        emails: emailList,
+                        tipo: tipo,
+                        assunto: assunto || undefined,
+                        mensagem_customizada: mensagemCustom || undefined
+                    }),
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    fecharNotifyModal();
+                } else {
+                    showAlert(data.message || 'Erro ao enviar notificação', 'error');
+                }
+            } catch (error) {
+                console.error('Erro ao enviar notificação:', error);
+                showAlert('Erro ao enviar notificação. Verifique sua conexão.', 'error');
+            } finally {
+                // Reabilitar botão
+                enviarNotifyBtn.disabled = false;
+                enviarNotifyBtn.innerHTML = originalText;
+            }
+        }
+
+        // ========== FUNÇÕES AUXILIARES ==========
+        function formatarData(dataStr) {
+            if (!dataStr) return 'N/A';
+            try {
+                const date = new Date(dataStr);
+                return date.toLocaleDateString('pt-BR') + ' ' + 
+                       date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            } catch (error) {
+                console.error('Erro ao formatar data:', error);
+                return dataStr;
+            }
+        }
+
+        function formatarDataCurta(dataStr) {
+            if (!dataStr) return 'N/A';
+            try {
+                const date = new Date(dataStr);
+                // Formato: DD/MM/YYYY
+                const dia = date.getDate().toString().padStart(2, '0');
+                const mes = (date.getMonth() + 1).toString().padStart(2, '0');
+                const ano = date.getFullYear();
+                return `${dia}/${mes}/${ano}`;
+            } catch (error) {
+                console.error('Erro ao formatar data curta:', error);
+                return dataStr;
+            }
+        }
+
+        function calcularDiasRestantes(dataFim) {
+            if (!dataFim) return -1;
+            try {
+                const fim = new Date(dataFim);
+                const hoje = new Date();
+                hoje.setHours(0, 0, 0, 0);
+                const diffTime = fim - hoje;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return diffDays;
+            } catch (error) {
+                console.error('Erro ao calcular dias restantes:', error);
+                return -1;
+            }
+        }
+
+        function formatarStatus(status) {
+            const statusMap = {
+                'ativo': { texto: 'Ativo', classe: 'badge-success', icone: 'check-circle' },
+                'inativo': { texto: 'Inativo', classe: 'badge-danger', icone: 'pause-circle' },
+                'concluido': { texto: 'Concluído', classe: 'badge-info', icone: 'check-double' },
+                'pendente': { texto: 'Pendente', classe: 'badge-warning', icone: 'clock' }
+            };
+            return statusMap[status] || { texto: status, classe: 'badge-secondary', icone: 'question-circle' };
+        }
+
+        async function exportarContratos() {
+            const user = await verificarAutenticacao();
+            if (!user) return;
+            
+            if (contratosFiltrados.length === 0) {
+                showAlert('Não há contratos para exportar!', 'warning');
+                return;
+            }
+            
+            try {
+                // Formatar dados para CSV
+                let csv = 'Nome;Descrição;Data Início;Data Término;Status;Dias Restantes;Criado em\n';
+                
+                contratosFiltrados.forEach(contrato => {
+                    const diasRestantes = calcularDiasRestantes(contrato.data_fim);
+                    const linha = [
+                        `"${contrato.nome.replace(/"/g, '""')}"`,
+                        `"${(contrato.descricao || '').replace(/"/g, '""')}"`,
+                        formatarData(contrato.data_inicio),
+                        formatarData(contrato.data_fim),
+                        contrato.status,
+                        diasRestantes > 0 ? `${diasRestantes} dias` : 'Expirado',
+                        formatarData(contrato.criado_em || contrato.data_inicio)
+                    ].join(';');
+                    
+                    csv += linha + '\n';
+                });
+                
+                // Criar blob e fazer download
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                
+                link.setAttribute('href', url);
+                link.setAttribute('download', `contratos_${new Date().toISOString().slice(0,10)}.csv`);
+                link.style.visibility = 'hidden';
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showAlert(`${contratosFiltrados.length} contratos exportados com sucesso!`, 'success');
+                
+            } catch (error) {
+                console.error('Erro ao exportar contratos:', error);
+                showAlert('Erro ao exportar contratos: ' + error.message, 'error');
+            }
+        }
+
+        function showAlert(message, type = 'info') {
+            const alertContainer = document.getElementById('alertContainer');
+            if (!alertContainer) return;
+            
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            
+            let icon = 'info-circle';
+            if (type === 'success') icon = 'check-circle';
+            if (type === 'error') icon = 'exclamation-circle';
+            if (type === 'warning') icon = 'exclamation-triangle';
+            
+            alert.innerHTML = `
+                <i class="fas fa-${icon}"></i>
+                <span>${message}</span>
+                <button class="alert-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            alertContainer.appendChild(alert);
+            
+            // Remover após 5 segundos
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.style.opacity = '0';
+                    alert.style.transform = 'translateY(-10px)';
+                    setTimeout(() => {
+                        if (alert.parentNode) {
+                            alert.parentNode.removeChild(alert);
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        function ajustarLayoutResponsivo() {
+            const largura = window.innerWidth;
+            
+            // Esconder texto dos botões em telas pequenas
+            const desktopOnly = document.querySelectorAll('.desktop-only');
+            desktopOnly.forEach(el => {
+                if (largura < 768) {
+                    el.style.display = 'none';
+                } else {
+                    el.style.display = 'inline';
+                }
+            });
+            
+            // Esconder colunas específicas em mobile
+            const mobileHidden = document.querySelectorAll('.mobile-hidden');
+            mobileHidden.forEach(el => {
+                if (largura < 600) {
+                    el.style.display = 'none';
+                } else {
+                    el.style.display = 'table-cell';
+                }
+            });
+        }
+
+        // ========== INICIALIZAÇÃO ==========
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                // Mostrar loading inicial
+                const globalLoading = document.getElementById('globalLoading');
+                if (globalLoading) globalLoading.style.display = 'flex';
+                
+                // Carregar tema
+                const savedTheme = localStorage.getItem('contrato-mais-theme') || 'claro';
+                applyTheme(savedTheme);
+                const themeIcon = document.querySelector('.theme-toggle i');
+                if (themeIcon) {
+                    themeIcon.className = savedTheme === 'claro' ? 'fas fa-moon' : 'fas fa-sun';
+                }
+                
+                // Verificar autenticação
+                const user = await verificarAutenticacao();
+                if (!user) {
+                    if (globalLoading) globalLoading.style.display = 'none';
+                    return;
+                }
+                
+                // Configurar eventos do formulário
+                const contratoForm = document.getElementById('contratoForm');
+                if (contratoForm) {
+                    contratoForm.addEventListener('submit', salvarContrato);
+                }
+                
+                // Configurar eventos de preview
+                ['nome', 'descricao', 'data_inicio', 'data_fim', 'status'].forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.addEventListener('input', updatePreview);
+                        element.addEventListener('change', updatePreview);
+                    }
+                });
+                
+                // Configurar eventos de notificação
+                const tipoNotificacao = document.getElementById('tipoNotificacao');
+                const assuntoNotificacao = document.getElementById('assuntoNotificacao');
+                const mensagemCustomizada = document.getElementById('mensagemCustomizada');
+                
+                if (tipoNotificacao) tipoNotificacao.addEventListener('change', atualizarPreviewNotificacao);
+                if (assuntoNotificacao) assuntoNotificacao.addEventListener('input', atualizarPreviewNotificacao);
+                if (mensagemCustomizada) mensagemCustomizada.addEventListener('input', atualizarPreviewNotificacao);
+                
+                // Configurar datas padrão
+                const dataInicio = document.getElementById('data_inicio');
+                const dataFim = document.getElementById('data_fim');
+                
+                if (dataInicio && dataFim) {
+                    const hoje = new Date();
+                    const mesQueVem = new Date(hoje);
+                    mesQueVem.setMonth(hoje.getMonth() + 1);
+                    
+                    dataInicio.value = hoje.toISOString().slice(0, 16);
+                    dataFim.value = mesQueVem.toISOString().slice(0, 16);
+                }
+                
+                // Atualizar preview inicial
+                updatePreview();
+                
+                // Carregar contratos
+                await carregarContratos();
+                
+                // Iniciar auto-refresh (atualizar a cada 30 segundos)
+                iniciarAutoRefresh();
+                
+                // Esconder loading
+                if (globalLoading) globalLoading.style.display = 'none';
+                
+            } catch (error) {
+                console.error('Erro na inicialização:', error);
+                showAlert('Erro ao inicializar a aplicação: ' + error.message, 'error');
+                const globalLoading = document.getElementById('globalLoading');
+                if (globalLoading) globalLoading.style.display = 'none';
+            }
+        });
+
+        function iniciarAutoRefresh() {
+            // Limpar intervalo anterior se existir
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+            
+            // Atualizar a cada 30 segundos
+            autoRefreshInterval = setInterval(async () => {
+                try {
+                    await carregarContratos();
+                    console.log('Auto-refresh realizado:', new Date().toLocaleTimeString());
+                } catch (error) {
+                    console.error('Erro no auto-refresh:', error);
+                }
+            }, 30000);
+        }
+
+        // Executar ao carregar e ao redimensionar
+        window.addEventListener('load', ajustarLayoutResponsivo);
+        window.addEventListener('resize', ajustarLayoutResponsivo);
+        async function alterarStatusContrato(id, novoStatus) {
+    const user = await verificarAutenticacao();
+    if (!user) return;
+    
+    if (!confirm(`Alterar status do contrato para "${novoStatus}"?`)) return;
+    
+    try {
+        // Primeiro, buscar o contrato atual para obter todos os dados
+        const responseGet = await fetch(`${API_BASE_URL}/contratos/${id}`, {
+            credentials: 'include'
+        });
+        
+        const dataGet = await responseGet.json();
+        
+        if (!dataGet.success) {
+            showAlert('Erro ao buscar contrato', 'error');
+            return;
+        }
+        
+        const contratoAtual = dataGet.contrato;
+        
+        // Atualizar apenas o status
+        const dadosAtualizacao = {
+            ...contratoAtual,
+            status: novoStatus
+        };
+        
+        const response = await fetch(`${API_BASE_URL}/contratos/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dadosAtualizacao),
+            credentials: 'include'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert(`Status alterado para "${novoStatus}" com sucesso!`, 'success');
+            await carregarContratos();
+        } else {
+            showAlert(data.message || 'Erro ao alterar status', 'error');
+        }
+    } catch (error) {
+        console.error('Erro ao alterar status:', error);
+        showAlert('Erro ao alterar status do contrato', 'error');
+    }
+}
+async function alterarStatusContrato(id, novoStatus) {
+    const user = await verificarAutenticacao();
+    if (!user) return;
+    
+    if (!confirm(`Alterar status do contrato para "${novoStatus}"?`)) return;
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/contratos/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: novoStatus }),
+            credentials: 'include'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert(`Status alterado para "${novoStatus}" com sucesso!`, 'success');
+            await carregarContratos();
+        } else {
+            showAlert(data.message || 'Erro ao alterar status', 'error');
+        }
+    } catch (error) {
+        console.error('Erro ao alterar status:', error);
+        showAlert('Erro ao alterar status do contrato', 'error');
+    }
+}
+    </script>
+</body>
+</html>

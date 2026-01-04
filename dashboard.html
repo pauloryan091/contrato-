@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="claro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONTRATO+ | Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ========== VARIÁVEIS DE DESIGN PADRÃO ========== */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --gray-light: #e5e7eb;
+            --border: #d1d5db;
+            --sidebar-bg: #1e293b;
+            --card-bg: white;
+            --text: var(--dark);
+            --text-light: var(--gray);
+            --radius: 12px;
+            --shadow: 0 10px 25px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="escuro"] {
+            --dark: #f9fafb;
+            --light: #111827;
+            --gray-light: #374151;
+            --border: #4b5563;
+            --card-bg: #1f2937;
+            --sidebar-bg: #111827;
+            --text: #f3f4f6;
+            --text-light: #d1d5db;
+        }
+
+        /* ========== RESET PADRÃO ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light);
+            color: var(--text);
+            transition: var(--transition);
+        }
+
+        /* ========== LAYOUT PADRÃO ========== */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ========== SIDEBAR PADRÃO ========== */
+        .sidebar {
+            width: 250px;
+            background: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            position: fixed;
+            height: 100vh;
+            z-index: 1000;
+        }
+
+        .logo-sidebar {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .logo-sidebar span:first-child {
+            letter-spacing: -1px;
+        }
+
+        .logo-sidebar span:last-child {
+            color: var(--secondary);
+            font-size: 2rem;
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+            gap: 12px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.05);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--secondary);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .user-info {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* ========== MAIN CONTENT PADRÃO ========== */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        /* ========== TOP BAR PADRÃO ========== */
+        .top-bar {
+            height: 70px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: var(--gray-light);
+        }
+
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        /* ========== CONTENT AREA PADRÃO ========== */
+        .content-area {
+            padding: 30px;
+            flex: 1;
+        }
+
+        /* ========== ALERTAS PADRÃO ========== */
+        .alert {
+            padding: 15px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideDown 0.3s;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========== STATS CARDS (DASHBOARD) ========== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 25px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 10px 0;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-desc {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        /* ========== REFRESH BUTTON ========== */
+        .refresh-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .refresh-btn:hover {
+            background: var(--primary-dark);
+            transform: rotate(180deg);
+        }
+
+        /* ========== TABELAS PADRÃO ========== */
+        .section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            background: var(--gray-light);
+            color: var(--text);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--border);
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:hover {
+            background: var(--gray-light);
+        }
+
+        /* ========== BADGES PADRÃO ========== */
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        /* ========== BOTÕES PADRÃO ========== */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-success {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #0da271;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+
+        /* ========== LOADING ========== */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(37, 99, 235, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+            z-index: 10;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========== REAL-TIME INDICATOR ========== */
+        .real-time-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* ========== RESPONSIVIDADE PADRÃO ========== */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .logo-sidebar span:first-child,
+            .nav-item span,
+            .user-info span {
+                display: none;
+            }
+            
+            .logo-sidebar {
+                font-size: 1.5rem;
+                text-align: center;
+                padding: 25px 10px;
+                justify-content: center;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: 60px;
+                flex-direction: row;
+                position: relative;
+            }
+            
+            .logo-sidebar {
+                width: 60px;
+                padding: 0;
+                justify-content: center;
+                border-bottom: none;
+                border-right: 1px solid rgba(255,255,255,0.1);
+            }
+            
+            .nav-menu {
+                display: flex;
+                flex: 1;
+                padding: 0;
+            }
+            
+            .nav-item {
+                flex: 1;
+                justify-content: center;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+                padding: 10px;
+            }
+            
+            .nav-item.active {
+                border-left: none;
+                border-bottom-color: var(--secondary);
+            }
+            
+            .user-info {
+                width: 60px;
+                padding: 10px;
+                justify-content: center;
+                border-top: none;
+                border-left: 1px solid rgba(255,255,255,0.1);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .content-area {
+                padding: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top-bar {
+                padding: 0 15px;
+            }
+            
+            .page-title {
+                font-size: 1.2rem;
+            }
+            
+            .logout-btn span {
+                display: none;
+            }
+            
+            .logout-btn {
+                padding: 10px;
+            }
+            
+            .refresh-btn {
+                width: 35px;
+                height: 35px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="claro">
+    <div class="app-container">
+        <!-- Sidebar Padrão -->
+        <div class="sidebar">
+            <div class="logo-sidebar">
+                <span>CONTRATO</span>
+                <span>+</span>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-item active">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="contratos.html" class="nav-item">
+                    <i class="fas fa-file-contract"></i>
+                    <span>Contratos</span>
+                </a>
+                <a href="notificacoes.html" class="nav-item">
+                    <i class="fas fa-bell"></i>
+                    <span>Notificações</span>
+                </a>
+                <a href="configuracoes.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Configurações</span>
+                </a>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-avatar">A</div>
+                <span id="userName">Carregando...</span>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Bar Padrão -->
+            <div class="top-bar">
+                <div class="page-title">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard em Tempo Real</span>
+                    <div class="real-time-indicator">
+                        <div class="pulse-dot"></div>
+                        <span>Ativo</span>
+                    </div>
+                </div>
+                
+                <div class="top-bar-actions">
+                    <button class="refresh-btn" onclick="loadDashboardData(true)" title="Atualizar dados">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Alternar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Sair</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Alertas -->
+                <div id="alertContainer"></div>
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card" id="statTotalContratos">
+                        <i class="fas fa-file-contract stat-icon"></i>
+                        <div class="stat-label">Total de Contratos</div>
+                        <div class="stat-value">0</div>
+                        <div class="stat-desc">Todos os contratos do sistema</div>
+                    </div>
+                    
+                    <div class="stat-card" id="statContratosAtivos">
+                        <i class="fas fa-check-circle stat-icon"></i>
+                        <div class="stat-label">Contratos Ativos</div>
+                        <div class="stat-value">0</div>
+                        <div class="stat-desc">Em andamento no momento</div>
+                    </div>
+                    
+                    <div class="stat-card" id="statContratosVencendo">
+                        <i class="fas fa-clock stat-icon"></i>
+                        <div class="stat-label">Próximos Vencimentos</div>
+                        <div class="stat-value">0</div>
+                        <div class="stat-desc">Nos próximos 7 dias</div>
+                    </div>
+                </div>
+                
+                <!-- Contratos Recentes -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-history"></i>
+                            <span>Contratos Recentes</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span class="stat-desc" id="lastUpdateContratos">
+                                Atualizado: --:--:--
+                            </span>
+                            <a href="contratos.html" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus"></i>
+                                Novo Contrato
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="contratosTable">
+                            <thead>
+                                <tr>
+                                    <th>Nome do Contrato</th>
+                                    <th>Data Início</th>
+                                    <th>Data Fim</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dados carregados via API -->
+                            </tbody>
+                        </table>
+                        <div id="loadingContratos" class="loading-overlay" style="display: none;">
+                            <div class="loading"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Notificações Recentes -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-bell"></i>
+                            <span>Notificações Recentes</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span class="stat-desc" id="lastUpdateNotificacoes">
+                                Atualizado: --:--:--
+                            </span>
+                            <button onclick="loadNotifications()" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-sync-alt"></i>
+                                Atualizar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="notificacoesTable">
+                            <thead>
+                                <tr>
+                                    <th>Contrato</th>
+                                    <th>Email Destino</th>
+                                    <th>Status</th>
+                                    <th>Data/Hora</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dados carregados via API -->
+                            </tbody>
+                        </table>
+                        <div id="loadingNotificacoes" class="loading-overlay" style="display: none;">
+                            <div class="loading"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+    <script>
+        // ========== CONFIGURAÇÕES ==========
+        const API_BASE_URL = `${window.location.origin}/api`;
+        const REFRESH_INTERVAL = 5000; // 5 segundos
+        let autoRefresh = true;
+        let refreshInterval;
+
+        // ========== FUNÇÕES DO TEMA ==========
+        function toggleTheme() {
+            const currentTheme = document.body.dataset.theme;
+            const newTheme = currentTheme === 'claro' ? 'escuro' : 'claro';
+            document.body.dataset.theme = newTheme;
+            localStorage.setItem('contrato-mais-theme', newTheme);
+            
+            // Atualizar ícone
+            const themeIcon = document.querySelector('.theme-toggle i');
+            themeIcon.className = newTheme === 'claro' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        // ========== AUTENTICAÇÃO ==========
+        async function checkAuth() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/check`);
+                const data = await response.json();
+                
+                if (!data.authenticated) {
+                    window.location.href = '/';
+                    return null;
+                }
+                
+                // Atualizar nome do usuário
+                document.getElementById('userName').textContent = data.user.nome_completo || 'Administrador';
+                return data.user;
+                
+            } catch (error) {
+                console.error('Erro na autenticação:', error);
+                showAlert('Erro de conexão com o servidor', 'error');
+                return null;
+            }
+        }
+
+        async function logout() {
+            if (confirm('Deseja realmente sair do sistema?')) {
+                try {
+                    await fetch(`${API_BASE_URL}/auth/logout`, {
+                        method: 'POST',
+                        credentials: 'include'
+                    });
+                } catch (error) {
+                    console.error('Erro no logout:', error);
+                }
+                window.location.href = '/';
+            }
+        }
+
+        // ========== CARREGAMENTO DE DADOS ==========
+        async function loadDashboardData(forceRefresh = false) {
+            if (forceRefresh) {
+                showAlert('Atualizando dados...', 'info');
+            }
+            
+            const user = await checkAuth();
+            if (!user) return;
+            
+            try {
+                // Carregar estatísticas
+                await loadStats();
+                
+                // Carregar contratos recentes
+                await loadRecentContracts();
+                
+                // Carregar notificações
+                await loadNotifications();
+                
+                // Atualizar timestamp
+                updateTimestamps();
+                
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                showAlert('Erro ao carregar dados. Tentando novamente...', 'error');
+            }
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/dashboard/stats`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const stats = data.stats || {
+                        total_contratos: 0,
+                        contratos_ativos: 0,
+                        contratos_vencendo: 0
+                    };
+                    
+                    // Atualizar cards com animação
+                    updateStatCard('statTotalContratos', stats.total_contratos);
+                    updateStatCard('statContratosAtivos', stats.contratos_ativos);
+                    updateStatCard('statContratosVencendo', stats.contratos_vencendo);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar estatísticas:', error);
+                // Usar dados locais em caso de erro
+                updateStatCard('statTotalContratos', 0);
+                updateStatCard('statContratosAtivos', 0);
+                updateStatCard('statContratosVencendo', 0);
+            }
+        }
+
+        async function loadRecentContracts() {
+            const loadingElement = document.getElementById('loadingContratos');
+            const tableBody = document.querySelector('#contratosTable tbody');
+            
+            loadingElement.style.display = 'flex';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/contratos/recentes`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    tableBody.innerHTML = '';
+                    
+                    if (data.contratos && data.contratos.length > 0) {
+                        data.contratos.forEach(contrato => {
+                            const row = document.createElement('tr');
+                            const dataInicio = formatDate(contrato.data_inicio);
+                            const dataFim = formatDate(contrato.data_fim);
+                            
+                            let statusBadge;
+                            if (contrato.status === 'ativo') {
+                                statusBadge = '<span class="badge badge-success">Ativo</span>';
+                            } else if (contrato.status === 'inativo') {
+                                statusBadge = '<span class="badge badge-danger">Inativo</span>';
+                            } else if (contrato.status === 'pendente') {
+                                statusBadge = '<span class="badge badge-warning">Pendente</span>';
+                            } else {
+                                statusBadge = '<span class="badge badge-info">' + contrato.status + '</span>';
+                            }
+                            
+                            row.innerHTML = `
+                                <td><strong>${contrato.nome || 'Sem nome'}</strong></td>
+                                <td>${dataInicio}</td>
+                                <td>${dataFim}</td>
+                                <td>${statusBadge}</td>
+                                <td>
+                                    <div style="display: flex; gap: 5px;">
+                                        <button onclick="alterarStatusContrato(${contrato.id}, 'ativo')" class="btn btn-success btn-sm" title="Ativar">
+                                            <i class="fas fa-play"></i>
+                                        </button>
+                                        <button onclick="alterarStatusContrato(${contrato.id}, 'inativo')" class="btn btn-danger btn-sm" title="Inativar">
+                                            <i class="fas fa-pause"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+                    } else {
+                        tableBody.innerHTML = `
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 30px; color: var(--text-light);">
+                                    <i class="fas fa-file-contract" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                                    Nenhum contrato cadastrado
+                                </td>
+                            </tr>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Erro ao carregar contratos:', error);
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 30px; color: var(--danger);">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                            Erro ao carregar contratos
+                        </td>
+                    </tr>
+                `;
+            } finally {
+                loadingElement.style.display = 'none';
+            }
+        }
+
+        async function loadNotifications() {
+            const loadingElement = document.getElementById('loadingNotificacoes');
+            const tableBody = document.querySelector('#notificacoesTable tbody');
+            
+            loadingElement.style.display = 'flex';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/notificacoes/recentes`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    tableBody.innerHTML = '';
+                    
+                    if (data.notificacoes && data.notificacoes.length > 0) {
+                        data.notificacoes.forEach(notif => {
+                            const row = document.createElement('tr');
+                            const dataEnvio = formatDateTime(notif.data_envio || notif.criado_em);
+                            
+                            let statusBadge;
+                            if (notif.status === 'enviado') {
+                                statusBadge = '<span class="badge badge-success">Enviado</span>';
+                            } else if (notif.status === 'erro') {
+                                statusBadge = '<span class="badge badge-danger">Erro</span>';
+                            } else if (notif.status === 'pendente') {
+                                statusBadge = '<span class="badge badge-warning">Pendente</span>';
+                            } else {
+                                statusBadge = '<span class="badge badge-info">' + (notif.status || 'Desconhecido') + '</span>';
+                            }
+                            
+                            row.innerHTML = `
+                                <td>${notif.contrato_nome || 'N/A'}</td>
+                                <td><code>${notif.email_destino || 'N/A'}</code></td>
+                                <td>${statusBadge}</td>
+                                <td>${dataEnvio}</td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+                    } else {
+                        tableBody.innerHTML = `
+                            <tr>
+                                <td colspan="4" style="text-align: center; padding: 30px; color: var(--text-light);">
+                                    <i class="fas fa-bell" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                                    Nenhuma notificação enviada
+                                </td>
+                            </tr>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Erro ao carregar notificações:', error);
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 30px; color: var(--danger);">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                            Erro ao carregar notificações
+                        </td>
+                    </tr>
+                `;
+            } finally {
+                loadingElement.style.display = 'none';
+            }
+        }
+
+        // ========== AÇÕES ==========
+        async function alterarStatusContrato(contratoId, novoStatus) {
+            if (!confirm(`Alterar status do contrato para ${novoStatus}?`)) return;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/contratos/${contratoId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: novoStatus }),
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert(`Status alterado para ${novoStatus}`, 'success');
+                    // Atualizar imediatamente após alteração
+                    setTimeout(() => loadDashboardData(true), 500);
+                } else {
+                    showAlert(`Erro: ${data.message || 'Erro desconhecido'}`, 'error');
+                }
+            } catch (error) {
+                console.error('Erro ao alterar status:', error);
+                showAlert('Erro ao alterar status', 'error');
+            }
+        }
+
+        // ========== FUNÇÕES AUXILIARES ==========
+        function updateStatCard(cardId, value) {
+            const card = document.getElementById(cardId);
+            const valueElement = card.querySelector('.stat-value');
+            
+            // Animar mudança de valor
+            const oldValue = parseInt(valueElement.textContent) || 0;
+            const newValue = parseInt(value) || 0;
+            
+            if (oldValue !== newValue) {
+                valueElement.style.color = newValue > oldValue ? '#10b981' : 
+                                          newValue < oldValue ? '#ef4444' : 
+                                          'var(--primary)';
+                
+                // Animar contador
+                animateCounter(valueElement, oldValue, newValue);
+                
+                setTimeout(() => {
+                    valueElement.style.color = 'var(--primary)';
+                }, 1000);
+            } else {
+                valueElement.textContent = newValue;
+            }
+        }
+
+        function animateCounter(element, start, end) {
+            const duration = 500;
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const currentValue = Math.floor(start + (end - start) * progress);
+                element.textContent = currentValue;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    element.textContent = end;
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('pt-BR');
+            } catch (error) {
+                return dateString;
+            }
+        }
+
+        function formatDateTime(dateTimeString) {
+            if (!dateTimeString) return 'N/A';
+            try {
+                const date = new Date(dateTimeString);
+                return date.toLocaleString('pt-BR');
+            } catch (error) {
+                return dateTimeString;
+            }
+        }
+
+        function updateTimestamps() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('pt-BR');
+            
+            document.getElementById('lastUpdateContratos').textContent = 
+                `Atualizado: ${timeString}`;
+            
+            document.getElementById('lastUpdateNotificacoes').textContent = 
+                `Atualizado: ${timeString}`;
+        }
+
+        function showAlert(message, type = 'info') {
+            const alertContainer = document.getElementById('alertContainer');
+            
+            // Limitar para 3 alertas simultâneos
+            if (alertContainer.children.length >= 3) {
+                const oldestAlert = alertContainer.children[0];
+                oldestAlert.style.animation = 'slideDown 0.3s reverse';
+                setTimeout(() => {
+                    if (oldestAlert.parentNode) {
+                        oldestAlert.parentNode.removeChild(oldestAlert);
+                    }
+                }, 300);
+            }
+            
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            
+            let icon = 'info-circle';
+            if (type === 'success') icon = 'check-circle';
+            if (type === 'error') icon = 'exclamation-circle';
+            if (type === 'warning') icon = 'exclamation-triangle';
+            
+            alert.innerHTML = `
+                <i class="fas fa-${icon}"></i>
+                <span>${message}</span>
+                <button class="alert-close" onclick="this.parentElement.remove()" style="margin-left: auto; background: none; border: none; color: inherit; cursor: pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            alertContainer.appendChild(alert);
+            
+            // Remover após 5 segundos
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.style.animation = 'slideDown 0.3s reverse';
+                    setTimeout(() => {
+                        if (alert.parentNode) {
+                            alert.parentNode.removeChild(alert);
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        function startAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+            
+            refreshInterval = setInterval(() => {
+                loadDashboardData();
+            }, REFRESH_INTERVAL);
+        }
+
+        function stopAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+            }
+        }
+
+        // ========== WEBSOCKET PARA TEMPO REAL ==========
+        function setupWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/ws`;
+            
+            try {
+                const ws = new WebSocket(wsUrl);
+                
+                ws.onopen = () => {
+                    console.log('WebSocket conectado');
+                    showAlert('Conectado em tempo real', 'success');
+                };
+                
+                ws.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    
+                    if (data.type === 'contrato_atualizado') {
+                        showAlert(`Contrato "${data.contrato_nome}" atualizado`, 'info');
+                        loadDashboardData();
+                    } else if (data.type === 'notificacao_enviada') {
+                        showAlert(`Notificação enviada para ${data.email_destino}`, 'success');
+                        loadDashboardData();
+                    } else if (data.type === 'novo_contrato') {
+                        showAlert(`Novo contrato criado: "${data.contrato_nome}"`, 'success');
+                        loadDashboardData();
+                    }
+                };
+                
+                ws.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                };
+                
+                ws.onclose = () => {
+                    console.log('WebSocket desconectado');
+                    setTimeout(setupWebSocket, 5000); // Reconectar após 5 segundos
+                };
+                
+                return ws;
+            } catch (error) {
+                console.error('Erro ao conectar WebSocket:', error);
+                return null;
+            }
+        }
+
+        // ========== INICIALIZAÇÃO ==========
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Carregar tema
+            const savedTheme = localStorage.getItem('contrato-mais-theme') || 'claro';
+            document.body.dataset.theme = savedTheme;
+            
+            const themeIcon = document.querySelector('.theme-toggle i');
+            themeIcon.className = savedTheme === 'claro' ? 'fas fa-moon' : 'fas fa-sun';
+            
+            // Verificar autenticação
+            const user = await checkAuth();
+            if (!user) return;
+            
+            // Carregar dados iniciais
+            await loadDashboardData(true);
+            
+            // Iniciar auto-refresh
+            startAutoRefresh();
+            
+            // Tentar conectar WebSocket
+            setupWebSocket();
+            
+            // Parar auto-refresh quando a página não estiver visível
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    stopAutoRefresh();
+                    document.querySelector('.real-time-indicator span').textContent = 'Pausado';
+                    document.querySelector('.pulse-dot').style.animation = 'none';
+                } else {
+                    startAutoRefresh();
+                    document.querySelector('.real-time-indicator span').textContent = 'Ativo';
+                    document.querySelector('.pulse-dot').style.animation = 'pulse 2s infinite';
+                    // Forçar atualização ao voltar
+                    loadDashboardData();
+                }
+            });
+            
+            // Atualizar indicador de tempo real
+            setInterval(() => {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('pt-BR');
+                
+                // Adicionar efeito de "pulse" no indicador a cada atualização
+                const pulseDot = document.querySelector('.pulse-dot');
+                pulseDot.style.animation = 'none';
+                setTimeout(() => {
+                    pulseDot.style.animation = 'pulse 2s infinite';
+                }, 10);
+            }, REFRESH_INTERVAL);
+        });
+
+        // ========== FUNÇÕES GLOBAIS ==========
+        window.toggleTheme = toggleTheme;
+        window.loadDashboardData = loadDashboardData;
+        window.loadNotifications = loadNotifications;
+        window.logout = logout;
+        window.alterarStatusContrato = alterarStatusContrato;
+    </script>
+
+</body>
+</html>

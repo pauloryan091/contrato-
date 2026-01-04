@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="claro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONTRATO+ | Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ========== VARIÁVEIS DO SISTEMA ========== */
+        :root {
+            --primary: #0b1633;
+            --primary-dark: #070f22;
+            --primary-light: #0f1d45;
+            --primary-bg: rgba(11, 22, 51, 0.1);
+            
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            
+            /* Modo Claro */
+            --light: #f9fafb;        /* Gray 50 - Fundo principal */
+            --dark: #1f2937;         /* Gray 800 - Texto */
+            --gray: #6b7280;         /* Gray 500 - Texto secundário */
+            --gray-light: #e5e7eb;   /* Gray 200 */
+            --border: #d1d5db;       /* Gray 300 - Bordas */
+            --card-bg: white;        /* Cards */
+            
+            --sidebar-bg: #1e293b;   /* Gray 800/900 - Sidebar */
+            
+            --radius: 12px;
+            --shadow: 0 10px 25px rgba(0,0,0,0.1);
+            --shadow-lg: 0 20px 40px rgba(0,0,0,0.15);
+            --transition: all 0.3s ease;
+        }
+
+        /* ========== MODO ESCURO ========== */
+        [data-theme="escuro"] {
+            --primary: #0b1633;
+            --primary-dark: #070f22;
+            --primary-light: #0f1d45;
+            --primary-bg: rgba(11, 22, 51, 0.15);
+            
+            /* Modo Escuro */
+            --light: #111827;        /* Gray 900 - Fundo principal */
+            --dark: #f9fafb;         /* Gray 50 - Texto */
+            --text-light: #d1d5db;   /* Gray 300 - Texto secundário */
+            --gray-light: #374151;   /* Gray 700 */
+            --border: #4b5563;       /* Gray 600 - Bordas */
+            --card-bg: #1f2937;      /* Gray 800 - Cards */
+            
+            --sidebar-bg: #111827;   /* Gray 900 - Sidebar */
+            
+            --shadow: 0 10px 25px rgba(0,0,0,0.3);
+            --shadow-lg: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        /* ========== CORES ADICIONAIS ========== */
+        :root {
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            
+            /* Cores para estados */
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --success-dark: #065f46;
+            
+            --error: #ef4444;
+            --error-light: #fee2e2;
+            --error-dark: #991b1b;
+            
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --warning-dark: #92400e;
+            
+            --info: #0b1633;
+            --info-light: rgba(11, 22, 51, 0.1);
+            --info-dark: #070f22;
+        }
+
+        /* ========== RESET ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: var(--transition);
+        }
+
+        /* ========== LOADING ========== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .logo-animation {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .logo-char {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 800;
+            color: white;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s forwards;
+        }
+
+        .logo-char:nth-child(1) { animation-delay: 0.1s; }
+        .logo-char:nth-child(2) { animation-delay: 0.2s; }
+        .logo-char:nth-child(3) { animation-delay: 0.3s; }
+        .logo-char:nth-child(4) { animation-delay: 0.4s; }
+        .logo-char:nth-child(5) { animation-delay: 0.5s; }
+        .logo-char:nth-child(6) { animation-delay: 0.6s; }
+        .logo-char:nth-child(7) { animation-delay: 0.7s; }
+        .logo-char:nth-child(8) { animation-delay: 0.8s; }
+
+        .logo-plus {
+            font-size: clamp(3rem, 10vw, 5rem);
+            color: white;
+            background: var(--secondary);
+            width: clamp(60px, 15vw, 80px);
+            height: clamp(60px, 15vw, 80px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s 1s forwards;
+        }
+
+        .loading-text {
+            color: white;
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            margin: 20px 0;
+            opacity: 0;
+            animation: fadeIn 1s 1.5s forwards;
+            text-align: center;
+        }
+
+        .loading-bar {
+            width: min(300px, 80vw);
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .loading-progress {
+            height: 100%;
+            width: 0%;
+            background: white;
+            border-radius: 2px;
+            animation: loading 2s ease-in-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes loading {
+            to { width: 100%; }
+        }
+
+        /* ========== CONTAINER PRINCIPAL ========== */
+        .main-container {
+            width: 100%;
+            max-width: 450px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.5s 2.5s forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========== HEADER COM TEMA ========== */
+        .login-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+
+        .logo {
+            font-size: clamp(1.8rem, 6vw, 2.2rem);
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .logo-text {
+            letter-spacing: -1px;
+        }
+
+        .logo-plus-small {
+            color: white;
+            background: var(--secondary);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .theme-toggle-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .theme-btn.active {
+            background: rgba(255, 255, 255, 0.4);
+            border-color: white;
+        }
+
+        /* ========== LOGIN CARD ========== */
+        .login-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            color: var(--dark);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary-bg);
+        }
+
+        .card-header h2 {
+            color: var(--primary);
+            font-size: clamp(1.5rem, 5vw, 1.8rem);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .subtitle {
+            color: var(--gray);
+            font-size: clamp(0.9rem, 3vw, 0.95rem);
+        }
+
+        [data-theme="escuro"] .subtitle {
+            color: var(--text-light);
+        }
+
+        /* ========== FORMULÁRIO ========== */
+        .login-form {
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px 45px 16px 45px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--card-bg);
+            color: var(--dark);
+        }
+
+        .form-control::placeholder {
+            color: var(--gray);
+        }
+
+        [data-theme="escuro"] .form-control::placeholder {
+            color: var(--text-light);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-bg);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 5px;
+            transition: var(--transition);
+        }
+
+        .toggle-password:hover {
+            color: var(--primary-dark);
+        }
+
+        /* ========== CHECKBOX ========== */
+        .form-options {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-container input {
+            display: none;
+        }
+
+        .checkmark {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 4px;
+            margin-right: 10px;
+            position: relative;
+            transition: var(--transition);
+            background: var(--card-bg);
+        }
+
+        .checkbox-container input:checked + .checkmark {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .checkbox-container input:checked + .checkmark:after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .checkbox-label {
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        .forgot-password {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .forgot-password:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* ========== BOTÃO PRINCIPAL ========== */
+        .btn-login {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-login:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(11, 22, 51, 0.4);
+        }
+
+        .btn-login:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-login:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-text {
+            transition: opacity 0.3s;
+            z-index: 1;
+        }
+
+        .btn-loader {
+            display: none;
+            animation: spin 1s linear infinite;
+            z-index: 1;
+        }
+
+        .btn-login::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-login:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========== ALERTAS ========== */
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-error {
+            background: var(--error-light);
+            color: var(--error-dark);
+            border: 1px solid var(--error);
+        }
+
+        .alert-success {
+            background: var(--success-light);
+            color: var(--success-dark);
+            border: 1px solid var(--success);
+        }
+
+        [data-theme="escuro"] .alert-error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+
+        [data-theme="escuro"] .alert-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #a7f3d0;
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* ========== RESPONSIVIDADE ========== */
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 30px;
+            }
+            
+            .login-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .theme-toggle-container {
+                margin-top: 10px;
+            }
+            
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 25px 20px;
+            }
+
+            .logo {
+                font-size: 1.6rem;
+            }
+
+            .logo-plus-small {
+                width: 30px;
+                height: 30px;
+                font-size: 1.2rem;
+            }
+
+            .card-header h2 {
+                font-size: 1.4rem;
+            }
+            
+            .card-header h2 i {
+                display: none;
+            }
+
+            .form-control {
+                padding: 14px 45px 14px 45px;
+                font-size: 0.95rem;
+            }
+            
+            .btn-login {
+                padding: 16px;
+                font-size: 1rem;
+            }
+            
+            .theme-btn {
+                width: 35px;
+                height: 35px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .login-card {
+                padding: 20px 15px;
+            }
+            
+            .logo {
+                font-size: 1.4rem;
+            }
+            
+            .logo-plus-small {
+                width: 25px;
+                height: 25px;
+                font-size: 1rem;
+            }
+            
+            .form-group {
+                margin-bottom: 20px;
+            }
+            
+            .form-control {
+                padding: 12px 40px 12px 40px;
+            }
+        }
+
+        /* ========== ANIMAÇÕES ADICIONAIS ========== */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body data-theme="claro">
+    <!-- Loading Animation -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="logo-animation">
+                <span class="logo-char">C</span>
+                <span class="logo-char">O</span>
+                <span class="logo-char">N</span>
+                <span class="logo-char">T</span>
+                <span class="logo-char">R</span>
+                <span class="logo-char">A</span>
+                <span class="logo-char">T</span>
+                <span class="logo-char">O</span>
+                <span class="logo-plus">+</span>
+            </div>
+            <div class="loading-text">Inicializando sistema...</div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container Principal -->
+    <div class="main-container" id="mainContainer" style="display: none;">
+        <!-- Header com Toggle de Tema -->
+        <div class="login-header">
+            <div class="logo-section">
+                <div class="logo">
+                    <span class="logo-text">CONTRATO</span>
+                    <span class="logo-plus-small">+</span>
+                </div>
+            </div>
+            
+            <div class="theme-toggle-container">
+                <button class="theme-btn active" onclick="setTheme('claro')" id="themeLight" title="Tema Claro">
+                    <i class="fas fa-sun"></i>
+                </button>
+                <button class="theme-btn" onclick="setTheme('escuro')" id="themeDark" title="Tema Escuro">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Card de Login -->
+        <div class="login-card">
+            <div class="card-header">
+                <h2><i class="fas fa-lock"></i> Acesso ao Sistema</h2>
+                <p class="subtitle">Digite suas credenciais para continuar</p>
+            </div>
+
+            <!-- Mensagem de erro -->
+            <div class="alert alert-error" id="errorMessage" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="errorText">Credenciais inválidas</span>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email" class="form-label">
+                        <i class="fas fa-envelope"></i> Email
+                    </label>
+                    <div class="input-with-icon">
+                        <input type="email" 
+                               id="email" 
+                               name="email" 
+                               class="form-control" 
+                               placeholder="seu.email@exemplo.com"
+                               required
+                               autocomplete="email"
+                               autofocus>
+                        <i class="fas fa-envelope input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">
+                        <i class="fas fa-key"></i> Senha
+                    </label>
+                    <div class="input-with-icon">
+                        <input type="password" 
+                               id="password" 
+                               name="password" 
+                               class="form-control" 
+                               placeholder="Sua senha secreta"
+                               required
+                               autocomplete="current-password">
+                        <i class="fas fa-key input-icon"></i>
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox-container">
+                        <input type="checkbox" name="remember" id="remember">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">Manter-me conectado</span>
+                    </label>
+                    
+                    <a href="#" class="forgot-password" onclick="forgotPassword()">
+                        <i class="fas fa-question-circle"></i>
+                        Esqueci minha senha
+                    </a>
+                </div>
+
+                <button type="submit" class="btn-login" id="submitBtn">
+                    <span class="btn-text">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Entrar no Sistema
+                    </span>
+                    <span class="btn-loader" id="btnLoader">
+                        <i class="fas fa-spinner"></i>
+                    </span>
+                </button>
+            </form>
+        </div>
+
+        <div class="footer">
+            <div>Sistema CONTRATO+ • Versão 1.0 • © 2026</div>
+        </div>
+    </div>
+
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+    <script>
+        // ========== CONFIGURAÇÕES ==========
+        const API_BASE_URL = 'http://localhost:5000/api';
+
+        // ========== INICIALIZAÇÃO ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            // Carregar tema salvo
+            const savedTheme = localStorage.getItem('contrato-mais-theme') || 'claro';
+            setTheme(savedTheme);
+            
+            // Esconder loading após 2.5 segundos
+            setTimeout(() => {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                if (loadingOverlay) {
+                    loadingOverlay.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                    }, 500);
+                }
+                
+                // Mostrar container principal
+                const mainContainer = document.getElementById('mainContainer');
+                if (mainContainer) {
+                    mainContainer.style.display = 'block';
+                }
+            }, 2500);
+
+            // Verificar se já está autenticado
+            checkAuth();
+            
+            // Preencher credenciais de demo se estiver em desenvolvimento
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                document.getElementById('email').value = 'admin@contratomais.com';
+                document.getElementById('password').value = 'admin123';
+            }
+        });
+
+        // ========== GERENCIAMENTO DE TEMA ==========
+        function setTheme(theme) {
+            document.body.dataset.theme = theme;
+            localStorage.setItem('contrato-mais-theme', theme);
+            
+            // Atualizar botões ativos
+            const themeLight = document.getElementById('themeLight');
+            const themeDark = document.getElementById('themeDark');
+            
+            if (themeLight && themeDark) {
+                if (theme === 'claro') {
+                    themeLight.classList.add('active');
+                    themeDark.classList.remove('active');
+                } else {
+                    themeLight.classList.remove('active');
+                    themeDark.classList.add('active');
+                }
+            }
+        }
+
+        // ========== TOGGLE PASSWORD ==========
+        const togglePassword = document.getElementById('togglePassword');
+        if (togglePassword) {
+            togglePassword.addEventListener('click', function() {
+                const passwordInput = document.getElementById('password');
+                const icon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+        }
+
+        // ========== VERIFICAR AUTENTICAÇÃO ==========
+        async function checkAuth() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/check`, {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.authenticated) {
+                        // Já está autenticado, redirecionar para contratos
+                        window.location.href = 'dashboard.html';
+                    }
+                }
+            } catch (error) {
+                console.log('Usuário não autenticado ou erro na verificação:', error);
+            }
+        }
+
+        // ========== FUNÇÃO DE LOGIN ==========
+        async function fazerLogin(email, password) {
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const btnLoader = document.getElementById('btnLoader');
+            
+            // Mostrar loading
+            btnText.style.display = 'none';
+            btnLoader.style.display = 'block';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        email: email, 
+                        senha: password 
+                    }),
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Login bem sucedido
+                    document.getElementById('errorMessage').style.display = 'none';
+                    
+                    // Salvar preferência "manter conectado"
+                    if (document.getElementById('remember').checked) {
+                        localStorage.setItem('contrato-mais-autologin', 'true');
+                    }
+                    
+                    // Mostrar mensagem de sucesso
+                    showAlert('Login realizado com sucesso! Redirecionando...', 'success');
+                    
+                    // Redirecionar para contratos após 1 segundo
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                    
+                    return true;
+                } else {
+                    // Mostrar erro
+                    showError(data.message || 'Credenciais inválidas. Verifique seu email e senha.');
+                    resetButton();
+                    return false;
+                }
+            } catch (error) {
+                console.error('Erro no login:', error);
+                showError('Erro ao conectar com o servidor. Verifique sua conexão.');
+                resetButton();
+                return false;
+            }
+            
+            function resetButton() {
+                btnText.style.display = 'flex';
+                btnLoader.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        }
+
+        // ========== MANIPULAÇÃO DO FORMULÁRIO ==========
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm) {
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                const errorMessage = document.getElementById('errorMessage');
+                const errorText = document.getElementById('errorText');
+                
+                // Validar campos
+                if (!email || !password) {
+                    showError('Preencha todos os campos');
+                    return;
+                }
+                
+                // Validar formato de email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showError('Digite um email válido');
+                    return;
+                }
+                
+                // Fazer login
+                await fazerLogin(email, password);
+                
+                function showError(message) {
+                    errorText.textContent = message;
+                    errorMessage.style.display = 'flex';
+                    
+                    // Shake animation
+                    errorMessage.style.animation = 'none';
+                    setTimeout(() => {
+                        errorMessage.style.animation = 'slideDown 0.3s, shake 0.5s';
+                    }, 10);
+                }
+            });
+        }
+
+        // ========== FUNÇÕES AUXILIARES ==========
+        function showAlert(message, type = 'info') {
+            const alertContainer = document.querySelector('.card-header');
+            const existingAlert = document.querySelector('.alert-temp');
+            
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+            
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-temp`;
+            alert.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.parentNode.insertBefore(alert, loginForm);
+            }
+            
+            // Remover após 5 segundos
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.style.animation = 'slideDown 0.3s reverse';
+                    setTimeout(() => {
+                        alert.parentNode.removeChild(alert);
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        function forgotPassword() {
+            const email = document.getElementById('email').value.trim();
+            
+            if (!email) {
+                showAlert('Digite seu email para recuperar a senha', 'error');
+                return;
+            }
+            
+            showAlert(`Instruções de recuperação enviadas para ${email}`, 'success');
+        }
+
+        // ========== ENTER PARA SUBMIT ==========
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const activeElement = document.activeElement;
+                if (activeElement.id === 'password' || activeElement.id === 'email') {
+                    const loginForm = document.getElementById('loginForm');
+                    if (loginForm) {
+                        loginForm.requestSubmit();
+                    }
+                }
+            }
+        });
+        
+        // ========== TECLAS DE ATALHO ==========
+        document.addEventListener('keydown', function(e) {
+            // Alt + T para alternar tema
+            if (e.altKey && e.key === 't') {
+                const currentTheme = document.body.dataset.theme;
+                const newTheme = currentTheme === 'claro' ? 'escuro' : 'claro';
+                setTheme(newTheme);
+                e.preventDefault();
+            }
+        });
+    </script>
+    <script src="api.js"></script>
+
+</body>
+</html>
